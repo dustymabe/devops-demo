@@ -1,0 +1,62 @@
+version: "2"
+services:
+  db:
+#   container_name: "db"
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=ticketmonster
+      - POSTGRES_PASSWORD=ticketmonster-docker
+#     # defaults from image
+#     - PATH=/usr/lib/postgresql/9.5/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+#     - GOSU_VERSION=1.7
+#     - LANG=en_US.utf8
+#     - PG_MAJOR=9.5
+#     - PG_VERSION=9.5.3-1.pgdg80+1
+#     - PGDATA=/var/lib/postgresql/data
+    command:
+      - "/docker-entrypoint.sh"
+      - "postgres"
+  modcluster:
+#   container_name: "modcluster"
+    image: karm/mod_cluster-master-dockerhub
+    environment:
+      - MODCLUSTER_NET=192. 172. 10. 179. 213.
+      - MODCLUSTER_PORT=80
+#     # Defaults from image
+#     - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+#     - HTTPD_BRANCH=2.4.17
+#     - APR_BRANCH=1.5.1
+#     - APR_UTIL_BRANCH=1.5.4
+#     - MOD_CLUSTER_BRANCH=master
+#     - MOD_CLUSTER_MODULES=advertise mod_cluster_slotmem mod_manager mod_proxy_cluster
+#     - HTTPD_DIST=https://github.com/apache/httpd/archive/2.4.17.zip
+#     - APR_DIST=https://github.com/apache/apr/archive/1.5.1.zip
+#     - APR_UTIL_DIST=https://github.com/apache/apr-util/archive/1.5.4.zip
+#     - MOD_CLUSTER_DIST=https://github.com/modcluster/mod_cluster/archive/master.zip
+#     - COMPILETIME_DEPS=binutils libtool openssl-devel unzip make autoconf gcc file which
+#     - HTTPD_MC_BUILD_DIR=/opt/httpd-build
+#     - CFLAGS=-O2
+    ports:
+      - "80:80"
+    command:
+      - "/docker-entrypoint.sh"
+      - "start"
+      - "-DFOREGROUND"
+  wildfly:
+#   container_name: "wildfly"
+    image: rafabene/wildfly-ticketmonster-ha
+#   environment:
+#     # Defaults from image
+#     - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+#     - JAVA_HOME=/usr/lib/jvm/java
+#     - WILDFLY_VERSION=10.0.0.Final
+#     - WILDFLY_SHA1=c0dd7552c5207b0d116a9c25eb94d10b4f375549
+#     - JBOSS_HOME=/opt/jboss/wildfly
+#     - LAUNCH_JBOSS_IN_BACKGROUND=true
+#     - JBOSS_MODE=standalone
+    command:
+      - "/bin/sh"
+      - "-c"
+      - "/opt/jboss/wildfly/bin/standalone.sh -b 0.0.0.0 -bmanagement 0.0.0.0 -c standalone-ha.xml"

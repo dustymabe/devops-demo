@@ -1,0 +1,19 @@
+- hosts: all
+  gather_facts: false
+  tasks:
+    - raw: ls /
+- hosts: db
+  become: root
+  tasks:
+    - name: Dummy Command
+      raw: /bin/true
+- hosts: modcluster
+  become: root
+  tasks:
+    - name: Dummy Command
+      raw: /bin/true
+- hosts: wildfly
+  become: root
+  tasks:
+    - name: Dummy Command
+      raw: /bin/true

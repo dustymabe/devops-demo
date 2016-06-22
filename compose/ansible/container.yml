@@ -1,4 +1,4 @@
-version: "1"
+version: "2"
 services:
   db:
     container_name: "db"
@@ -18,7 +18,11 @@ services:
       - "80:80"
   wildfly:
     container_name: "wildfly"
-    image: rafabene/wildfly-ticketmonster-ha
+    #image: rafabene/wildfly-ticketmonster-ha
+    image: compose-wildfly
+    #build: ../Dockerfiles/ticketmonster-ha/
+    # must use absolute path or link to github repo with ansible-container
+    build: /sharedfolder/github.com/rafabene/devops-demo/Dockerfiles/ticketmonster-ha/
     links:
       - db
       - modcluster
